@@ -1,11 +1,25 @@
 import { connectDB } from "@/lib/db";
 import ProductsModel from "@/models/Products";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 await connectDB();
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   try {
-    const products = await ProductsModel.find();
+    const searchParam = await req.nextUrl.searchParams;
+    const searchTerm = searchParam.get("q");
+    const limit = Number(searchParam.get("limit"));
+
+    const filter: Record<string, any> = {};
+    if (searchTerm) {
+      filter.title = { $regex: searchTerm, $options: "i" };
+    }
+    let productsQuery = ProductsModel.find(filter);
+
+    if (!isNaN(limit) && limit > 0) {
+      productsQuery = productsQuery.limit(limit);
+    }
+
+    const products = await productsQuery;
     return NextResponse.json({
       data: products,
     });
