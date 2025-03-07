@@ -1,14 +1,18 @@
 "use client";
 import { Button } from "@/compontents/Button";
-import { handleSubmit } from "@/controllers/auth/auth";
-import { userResT, UserT } from "@/types/user.types";
-import { redirect } from "next/navigation";
-import { useActionState, useState } from "react";
+import { signup } from "@/controllers/auth/auth";
+
+import { useActionState, useEffect, useState } from "react";
 
 export default function Signup() {
-  const [errors, setErrors] = useState();
-  const [state, formAction, isPending] = useActionState(handleSubmit, {});
-  console.log(state);
+  const [errors, setErrors] = useState("");
+  const [state, formAction, isPending] = useActionState(signup, {});
+  console.log(state, isPending);
+  useEffect(() => {
+    if (!isPending && !state.success) {
+      setErrors(state.message);
+    }
+  }, [state, isPending]);
 
   return (
     <div className="">
@@ -49,7 +53,8 @@ export default function Signup() {
             className="border px-2 py-1 rounded-md"
           />
         </div>
-        <Button>submit</Button>
+        <div>{errors && <p className="text-red-400">{errors}</p>}</div>
+        <Button>signup</Button>
       </form>
     </div>
   );

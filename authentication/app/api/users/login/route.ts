@@ -3,6 +3,8 @@ import bcryptjs from "bcryptjs";
 import User from "@/models/user";
 import DbConnect from "@/config/Db";
 import { UserT } from "@/types/user.types";
+import jwt from "jsonwebtoken";
+import { cookies } from "next/headers";
 
 await DbConnect();
 export async function POST(req: NextRequest) {
@@ -37,6 +39,17 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+    const token = jwt.sign({ id: user._id }, "seceret");
+    const cookieStore = await cookies();
+
+    // Set the token in the cookie
+    cookieStore.set("atoken", token, {
+      httpOnly: true,
+
+      path: "/", // Cookie accessible across the app
+      maxAge: 60 * 60, // 1 hour expiration
+    });
+
     return NextResponse.json(
       {
         messaage: "success",
