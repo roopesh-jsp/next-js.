@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    const token = jwt.sign({ id: user._id }, "seceret");
+    const token = jwt.sign({ id: user._id, user: user }, "seceret");
     const cookieStore = await cookies();
 
     // Set the token in the cookie
