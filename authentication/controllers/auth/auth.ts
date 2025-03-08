@@ -26,24 +26,25 @@ export async function signup(prevState: {}, formData: FormData) {
   }
 }
 
-export async function login(prevState: {}, formData: FormData) {
-  const data: UserT = {
-    email: (formData.get("email") as string) || "",
-    password: (formData.get("password") as string) || "",
-  };
+// export async function login(prevState: {}, formData: FormData) {
+//   const data: UserT = {
+//     email: (formData.get("email") as string) || "",
+//     password: (formData.get("password") as string) || "",
+//   };
 
-  const res = await fetch("http://localhost:3000/api/users/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-  const jsonResponse: userResT = await res.json();
+//   const res = await fetch("http://localhost:3000/api/users/login", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify(data),
+//     credentials: "include",
+//   });
+//   const jsonResponse: userResT = await res.json();
 
-  if (jsonResponse.success) {
-    redirect("/");
-  } else {
-    return jsonResponse;
-  }
-}
+//   if (jsonResponse.success) {
+//     redirect("/");
+//   } else {
+//     return jsonResponse;
+//   }
+// }

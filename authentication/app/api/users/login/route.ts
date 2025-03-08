@@ -45,9 +45,6 @@ export async function POST(req: NextRequest) {
     // Set the token in the cookie
     cookieStore.set("atoken", token, {
       httpOnly: true,
-
-      path: "/", // Cookie accessible across the app
-      maxAge: 60 * 60, // 1 hour expiration
     });
 
     return NextResponse.json(
