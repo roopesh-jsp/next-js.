@@ -3,6 +3,7 @@ import bcryptjs from "bcryptjs";
 import User from "@/models/user";
 import DbConnect from "@/config/Db";
 import { UserT } from "@/types/user.types";
+import { sendMail } from "@/helpers/helper";
 
 await DbConnect();
 export async function POST(req: NextRequest) {
@@ -29,7 +30,11 @@ export async function POST(req: NextRequest) {
     }
     const hashedPw = await bcryptjs.hash(password, 10);
     const newUser = new User({ name, password: hashedPw, email });
+    const verifyToken = await bcryptjs.hash(newUser._id.toString(), 10);
+    newUser.verifyToken = verifyToken;
     await newUser.save();
+
+    await sendMail(newUser.email, verifyToken);
     return NextResponse.json(
       {
         messaage: "success",

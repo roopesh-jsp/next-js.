@@ -10,6 +10,8 @@ function ProfilePage() {
     });
     const response = await res.json();
 
+    console.log(response);
+
     setUser(response.user);
   }
   useEffect(() => {
@@ -18,7 +20,7 @@ function ProfilePage() {
 
   return (
     <div>
-      <h1>{user.user.name}</h1>
+      <h1>{user?.user?.name}</h1>
     </div>
   );
 }
