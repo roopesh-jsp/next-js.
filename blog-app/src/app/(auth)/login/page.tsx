@@ -43,7 +43,7 @@ function Page() {
       if (res?.success) {
         resetField("email");
         resetField("password");
-        router.push("/");
+        window.location.href = "/";
       } else {
         setError("backend", {
           message: res?.error || "an error occured",

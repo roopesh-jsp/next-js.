@@ -7,6 +7,11 @@ import connectDb from "@/utils/connectDb";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+
+interface JwtPayloadWithId {
+  _id: string;
+}
 
 export const loginAction = async (formdata: LoginFormData): Promise<any> => {
   try {
@@ -80,11 +85,39 @@ export const signupAction = async (formdata: SignUpFormData): Promise<any> => {
     cookieStore.set("token", token, {
       httpOnly: true,
     });
+
     return {
       success: true,
       message: "registration successful",
     };
   } catch (error) {
     console.log(`something went wrong on login action: ${error}`);
+  }
+};
+
+export const getUser = async () => {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token")?.value as string;
+    if (!token) {
+      return null;
+    }
+    const decoded = jwt.verify(token, process.env.JWT!) as JwtPayloadWithId;
+    const user = await User.findById(decoded._id);
+    if (!user) {
+      return null;
+    }
+    return user;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const logoutAction = async () => {
+  try {
+    (await cookies()).delete("token");
+  } catch (error) {
+    console.log(error);
   }
 };
