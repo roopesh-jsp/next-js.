@@ -21,6 +21,8 @@ export const loginAction = async (data: z.infer<typeof loginSchema>) => {
       redirectTo: defalut_redirect,
     });
   } catch (error) {
+    console.log(error);
+
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":

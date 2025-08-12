@@ -2,6 +2,8 @@ import { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { loginSchema } from "../schemas";
 import GitHub from "next-auth/providers/github";
+import Google from "next-auth/providers/google";
+
 import { db } from "./lib/db";
 import bcrypt from "bcryptjs";
 export default {
@@ -24,6 +26,14 @@ export default {
         }
         return null;
       },
+    }),
+    GitHub({
+      clientId: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECERT,
+    }),
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECERT,
     }),
   ],
 } satisfies NextAuthConfig;

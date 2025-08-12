@@ -14,7 +14,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={` antialiased bg-stone-100 text-stone-600`}>
+      <body
+        className={` antialiased bg-stone-100 text-stone-600`}
+        cz-shortcut-listen="true"
+      >
         {children}
       </body>
     </html>
